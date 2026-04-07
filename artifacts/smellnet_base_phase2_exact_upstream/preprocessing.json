@@ -1,0 +1,732 @@
+{
+  "track": "exact-upstream-search-phase2",
+  "raw_sensor_columns": [
+    "NO2",
+    "C2H5OH",
+    "VOC",
+    "CO",
+    "Alcohol",
+    "LPG",
+    "Benzene",
+    "Temperature",
+    "Pressure",
+    "Humidity",
+    "Gas_Resistance",
+    "Altitude"
+  ],
+  "used_sensor_columns": [
+    "NO2",
+    "C2H5OH",
+    "VOC",
+    "CO",
+    "Alcohol",
+    "LPG"
+  ],
+  "dropped_sensor_columns": [
+    "Benzene",
+    "Temperature",
+    "Pressure",
+    "Humidity",
+    "Gas_Resistance",
+    "Altitude"
+  ],
+  "gradient_period": 25,
+  "window_size": 100,
+  "stride": 50,
+  "scaler_mean": [
+    1.7233549029367845,
+    1.0911697361871577,
+    2.2411796913887505,
+    1.035345943255351,
+    0.005778994524639124,
+    0.16414634146341464
+  ],
+  "scaler_scale": [
+    10.33659613247116,
+    8.263166525656725,
+    12.518892665540672,
+    4.635630402732155,
+    1.0865811013168742,
+    3.7079857762848314
+  ],
+  "labels": [
+    "allspice",
+    "almond",
+    "angelica",
+    "apple",
+    "asparagus",
+    "avocado",
+    "banana",
+    "brazil_nut",
+    "broccoli",
+    "brussel_sprouts",
+    "cabbage",
+    "cashew",
+    "cauliflower",
+    "chamomile",
+    "chervil",
+    "chestnuts",
+    "chives",
+    "cinnamon",
+    "cloves",
+    "coriander",
+    "cumin",
+    "dill",
+    "garlic",
+    "ginger",
+    "hazelnut",
+    "kiwi",
+    "lemon",
+    "mandarin_orange",
+    "mango",
+    "mint",
+    "mugwort",
+    "mustard",
+    "nutmeg",
+    "oregano",
+    "peach",
+    "peanuts",
+    "pear",
+    "pecans",
+    "pili_nut",
+    "pineapple",
+    "pistachios",
+    "potato",
+    "radish",
+    "saffron",
+    "star_anise",
+    "strawberry",
+    "sweet_potato",
+    "tomato",
+    "turnip",
+    "walnuts"
+  ],
+  "split_summary": {
+    "validation_files_per_class": 1,
+    "validation_fold_offset": 0,
+    "labels": {
+      "allspice": {
+        "train_files": [
+          "allspice.4dda19069069.csv",
+          "allspice.898e1c788fca.csv",
+          "allspice.90efa8c818cc.csv",
+          "allspice.9f97940311e4.csv"
+        ],
+        "val_files": [
+          "allspice.31403b058a64.csv"
+        ],
+        "fold_count": 5
+      },
+      "almond": {
+        "train_files": [
+          "almond.4016eb19a226.csv",
+          "almond.8efe4fc13fd7.csv",
+          "almond.a5807139ebbd.csv",
+          "almond.d31ddd049b10.csv"
+        ],
+        "val_files": [
+          "almond.1358d2b56280.csv"
+        ],
+        "fold_count": 5
+      },
+      "angelica": {
+        "train_files": [
+          "angelica.493dbe9556eb.csv",
+          "angelica.4c16ca0725e7.csv",
+          "angelica.741575ec0b4b.csv",
+          "angelica.d719387aa9b0.csv"
+        ],
+        "val_files": [
+          "angelica.21b8f073cff4.csv"
+        ],
+        "fold_count": 5
+      },
+      "apple": {
+        "train_files": [
+          "apple.53398c87211d.csv",
+          "apple.92a13564a60c.csv",
+          "apple.b79ec5501b57.csv",
+          "apple.c2dd844ef205.csv"
+        ],
+        "val_files": [
+          "apple.31a9872a75df.csv"
+        ],
+        "fold_count": 5
+      },
+      "asparagus": {
+        "train_files": [
+          "asparagus.47afb725e4b0.csv",
+          "asparagus.da9735ad180f.csv",
+          "asparagus.f67337449af3.csv",
+          "asparagus.fd7097fb7116.csv"
+        ],
+        "val_files": [
+          "asparagus.259a631a70d4.csv"
+        ],
+        "fold_count": 5
+      },
+      "avocado": {
+        "train_files": [
+          "avocado.0867795c9132.csv",
+          "avocado.1e2abe37d8c9.csv",
+          "avocado.365260112bba.csv",
+          "avocado.e625317fb106.csv"
+        ],
+        "val_files": [
+          "avocado.0342b097f133.csv"
+        ],
+        "fold_count": 5
+      },
+      "banana": {
+        "train_files": [
+          "banana.8586201bf6d5.csv",
+          "banana.968e4cae07f3.csv",
+          "banana.dd8e08790cd6.csv",
+          "banana.f7d074c3edc2.csv"
+        ],
+        "val_files": [
+          "banana.19b92b17463c.csv"
+        ],
+        "fold_count": 5
+      },
+      "brazil_nut": {
+        "train_files": [
+          "brazil_nut.4dbde58e1630.csv",
+          "brazil_nut.87c2f95be9d5.csv",
+          "brazil_nut.93e9d7bc1eed.csv",
+          "brazil_nut.e10e309eac83.csv"
+        ],
+        "val_files": [
+          "brazil_nut.473498d12e1e.csv"
+        ],
+        "fold_count": 5
+      },
+      "broccoli": {
+        "train_files": [
+          "broccoli.7ed2356117cc.csv",
+          "broccoli.7fef9824ee4d.csv",
+          "broccoli.b600b4ca3cf8.csv",
+          "broccoli.c6fa3b97e48f.csv"
+        ],
+        "val_files": [
+          "broccoli.6d35a493a01e.csv"
+        ],
+        "fold_count": 5
+      },
+      "brussel_sprouts": {
+        "train_files": [
+          "brussel_sprouts.931003584196.csv",
+          "brussel_sprouts.ad95b4f19da3.csv",
+          "brussel_sprouts.be8f80864ccb.csv",
+          "brussel_sprouts.fc024431550a.csv"
+        ],
+        "val_files": [
+          "brussel_sprouts.573eb64b967a.csv"
+        ],
+        "fold_count": 5
+      },
+      "cabbage": {
+        "train_files": [
+          "cabbage.4862461c9ee4.csv",
+          "cabbage.664bef8bf4a3.csv",
+          "cabbage.aee769f81c7f.csv",
+          "cabbage.dd96c0a38fe1.csv"
+        ],
+        "val_files": [
+          "cabbage.0020c5b9b119.csv"
+        ],
+        "fold_count": 5
+      },
+      "cashew": {
+        "train_files": [
+          "cashew.6cfb644ae152.csv",
+          "cashew.b89af08e4797.csv",
+          "cashew.dde1e7b9e93c.csv",
+          "cashew.e36153a10136.csv"
+        ],
+        "val_files": [
+          "cashew.10c9f09db697.csv"
+        ],
+        "fold_count": 5
+      },
+      "cauliflower": {
+        "train_files": [
+          "cauliflower.48f2d103e0aa.csv",
+          "cauliflower.9f0d402a91c7.csv",
+          "cauliflower.d9515a0e0fe6.csv",
+          "cauliflower.fcb9a5b762e2.csv"
+        ],
+        "val_files": [
+          "cauliflower.0490d1fe352d.csv"
+        ],
+        "fold_count": 5
+      },
+      "chamomile": {
+        "train_files": [
+          "chamomile.556b121c5195.csv",
+          "chamomile.5b86c739ae25.csv",
+          "chamomile.711922279ad2.csv",
+          "chamomile.750094383bdf.csv"
+        ],
+        "val_files": [
+          "chamomile.100ee489c71b.csv"
+        ],
+        "fold_count": 5
+      },
+      "chervil": {
+        "train_files": [
+          "chervil.a704ac2f32fb.csv",
+          "chervil.a7efcd8677d5.csv",
+          "chervil.d1094742854e.csv",
+          "chervil.f962cec6ff62.csv"
+        ],
+        "val_files": [
+          "chervil.84d81bf74087.csv"
+        ],
+        "fold_count": 5
+      },
+      "chestnuts": {
+        "train_files": [
+          "chestnuts.1bbc56387cc4.csv",
+          "chestnuts.56881bfa9f3c.csv",
+          "chestnuts.c1cad7cce0dd.csv",
+          "chestnuts.c2e52cf17f5d.csv"
+        ],
+        "val_files": [
+          "chestnuts.00c02a5a2007.csv"
+        ],
+        "fold_count": 5
+      },
+      "chives": {
+        "train_files": [
+          "chives.2ba04065e7bb.csv",
+          "chives.4d89c496f1ce.csv",
+          "chives.7001d3a47798.csv",
+          "chives.d03788473ba3.csv"
+        ],
+        "val_files": [
+          "chives.015105ad0aa8.csv"
+        ],
+        "fold_count": 5
+      },
+      "cinnamon": {
+        "train_files": [
+          "cinnamon.4a4e69e54a5a.csv",
+          "cinnamon.9eb1c03eedfb.csv",
+          "cinnamon.bcb379fc3860.csv",
+          "cinnamon.f3f14e8d351d.csv"
+        ],
+        "val_files": [
+          "cinnamon.34cc128b7b9d.csv"
+        ],
+        "fold_count": 5
+      },
+      "cloves": {
+        "train_files": [
+          "cloves.2b8745bc125c.csv",
+          "cloves.56f1fb21c7a1.csv",
+          "cloves.59a73856cff3.csv",
+          "cloves.eb40de4e034a.csv"
+        ],
+        "val_files": [
+          "cloves.12171161b5c1.csv"
+        ],
+        "fold_count": 5
+      },
+      "coriander": {
+        "train_files": [
+          "coriander.55bb34b230b2.csv",
+          "coriander.73987fc97036.csv",
+          "coriander.790642c7e871.csv",
+          "coriander.af14b9f4eb52.csv"
+        ],
+        "val_files": [
+          "coriander.07d40d602079.csv"
+        ],
+        "fold_count": 5
+      },
+      "cumin": {
+        "train_files": [
+          "cumin.1a75cd44eb13.csv",
+          "cumin.2582bdbd4421.csv",
+          "cumin.cd93d4c953c1.csv",
+          "cumin.e14fb38467d3.csv"
+        ],
+        "val_files": [
+          "cumin.08fc214f45fb.csv"
+        ],
+        "fold_count": 5
+      },
+      "dill": {
+        "train_files": [
+          "dill.51cb848588a6.csv",
+          "dill.71dd63890dcc.csv",
+          "dill.81e0b27ce3a8.csv",
+          "dill.d4659a001ba9.csv"
+        ],
+        "val_files": [
+          "dill.0a2c5290b65a.csv"
+        ],
+        "fold_count": 5
+      },
+      "garlic": {
+        "train_files": [
+          "garlic.165cb0df4bc0.csv",
+          "garlic.25c3fa6f912b.csv",
+          "garlic.cc9e876c325a.csv",
+          "garlic.d7ef530281d7.csv"
+        ],
+        "val_files": [
+          "garlic.13df3e51ddc8.csv"
+        ],
+        "fold_count": 5
+      },
+      "ginger": {
+        "train_files": [
+          "ginger.36e0c39f52f8.csv",
+          "ginger.3cc10d612104.csv",
+          "ginger.709b833bda37.csv",
+          "ginger.b4c1bf67cf9e.csv"
+        ],
+        "val_files": [
+          "ginger.0c9a145b78ee.csv"
+        ],
+        "fold_count": 5
+      },
+      "hazelnut": {
+        "train_files": [
+          "hazelnut.93355994d369.csv",
+          "hazelnut.ab36c15cf110.csv",
+          "hazelnut.d80aebbf7849.csv",
+          "hazelnut.fe355ee76231.csv"
+        ],
+        "val_files": [
+          "hazelnut.2d8e4f0971a0.csv"
+        ],
+        "fold_count": 5
+      },
+      "kiwi": {
+        "train_files": [
+          "kiwi.62e16fd2d060.csv",
+          "kiwi.789f7c20443d.csv",
+          "kiwi.7f127824bc76.csv",
+          "kiwi.8138c346d1eb.csv"
+        ],
+        "val_files": [
+          "kiwi.571814655496.csv"
+        ],
+        "fold_count": 5
+      },
+      "lemon": {
+        "train_files": [
+          "lemon.6c69337909f2.csv",
+          "lemon.9f23cc7bb34c.csv",
+          "lemon.e7d4d3e201e0.csv",
+          "lemon.f1ef31bb2fe2.csv"
+        ],
+        "val_files": [
+          "lemon.1172ecbdd5b5.csv"
+        ],
+        "fold_count": 5
+      },
+      "mandarin_orange": {
+        "train_files": [
+          "mandarin_orange.99285d3cd80c.csv",
+          "mandarin_orange.9c7b0bface2b.csv",
+          "mandarin_orange.c1f6a8039fb9.csv",
+          "mandarin_orange.fe36ff885133.csv"
+        ],
+        "val_files": [
+          "mandarin_orange.05b4c2b573f2.csv"
+        ],
+        "fold_count": 5
+      },
+      "mango": {
+        "train_files": [
+          "mango.838afe010120.csv",
+          "mango.8b9e4f41b08d.csv",
+          "mango.af6edffd9e2b.csv",
+          "mango.baf3b0acfa1b.csv"
+        ],
+        "val_files": [
+          "mango.51b81efd43ce.csv"
+        ],
+        "fold_count": 5
+      },
+      "mint": {
+        "train_files": [
+          "mint.1a6044f2d07e.csv",
+          "mint.7e84c6984489.csv",
+          "mint.e59087dc5861.csv",
+          "mint.ee66497617d0.csv"
+        ],
+        "val_files": [
+          "mint.11b217bffc1f.csv"
+        ],
+        "fold_count": 5
+      },
+      "mugwort": {
+        "train_files": [
+          "mugwort.8a428c31b384.csv",
+          "mugwort.be23691c0a71.csv",
+          "mugwort.eedd139c00b2.csv",
+          "mugwort.fedb3c17a272.csv"
+        ],
+        "val_files": [
+          "mugwort.8489cd7111f3.csv"
+        ],
+        "fold_count": 5
+      },
+      "mustard": {
+        "train_files": [
+          "mustard.45843ba0ea9c.csv",
+          "mustard.71f212e55de2.csv",
+          "mustard.d81e05642612.csv",
+          "mustard.db9d4705a0af.csv"
+        ],
+        "val_files": [
+          "mustard.32ed8f179daf.csv"
+        ],
+        "fold_count": 5
+      },
+      "nutmeg": {
+        "train_files": [
+          "nutmeg.25b66efd36f3.csv",
+          "nutmeg.bb6a98eff9ef.csv",
+          "nutmeg.e0b6fc09211e.csv",
+          "nutmeg.ee450fc124d1.csv"
+        ],
+        "val_files": [
+          "nutmeg.148196452e98.csv"
+        ],
+        "fold_count": 5
+      },
+      "oregano": {
+        "train_files": [
+          "oregano.1b185fb27068.csv",
+          "oregano.2de6b69dd6cc.csv",
+          "oregano.34f62512a294.csv",
+          "oregano.b7e899a9be5b.csv"
+        ],
+        "val_files": [
+          "oregano.0af4892da3e6.csv"
+        ],
+        "fold_count": 5
+      },
+      "peach": {
+        "train_files": [
+          "peach.4f69f26c1fc8.csv",
+          "peach.7af2b1866204.csv",
+          "peach.8f65b93e9a58.csv",
+          "peach.94b713a12a9a.csv"
+        ],
+        "val_files": [
+          "peach.319883b76e5e.csv"
+        ],
+        "fold_count": 5
+      },
+      "peanuts": {
+        "train_files": [
+          "peanuts.50d6a8a2348d.csv",
+          "peanuts.58981c293a33.csv",
+          "peanuts.6135f1e3107b.csv",
+          "peanuts.79dcfa111461.csv"
+        ],
+        "val_files": [
+          "peanuts.1692e3ae13cf.csv"
+        ],
+        "fold_count": 5
+      },
+      "pear": {
+        "train_files": [
+          "pear.251a2f5b4c30.csv",
+          "pear.3945883654e8.csv",
+          "pear.a1ffb1f8a0c5.csv",
+          "pear.b2a55c2434bb.csv"
+        ],
+        "val_files": [
+          "pear.1e6beb378407.csv"
+        ],
+        "fold_count": 5
+      },
+      "pecans": {
+        "train_files": [
+          "pecans.0de9c98d625f.csv",
+          "pecans.65fec345cbfb.csv",
+          "pecans.c769736ba6ee.csv",
+          "pecans.f1df30f87a84.csv"
+        ],
+        "val_files": [
+          "pecans.039287d3d677.csv"
+        ],
+        "fold_count": 5
+      },
+      "pili_nut": {
+        "train_files": [
+          "pili_nut.1ece8a44dcfa.csv",
+          "pili_nut.6750fba70b8f.csv",
+          "pili_nut.ce67b04e85b9.csv",
+          "pili_nut.fec2d554a3ba.csv"
+        ],
+        "val_files": [
+          "pili_nut.01e535ed2b49.csv"
+        ],
+        "fold_count": 5
+      },
+      "pineapple": {
+        "train_files": [
+          "pineapple.21828e7e29d1.csv",
+          "pineapple.719cc9d8fae0.csv",
+          "pineapple.c147713164d5.csv",
+          "pineapple.fb4bc3efcfea.csv"
+        ],
+        "val_files": [
+          "pineapple.09b3a4ebd0e6.csv"
+        ],
+        "fold_count": 5
+      },
+      "pistachios": {
+        "train_files": [
+          "pistachios.04ff76b5457c.csv",
+          "pistachios.8e1b81ccd312.csv",
+          "pistachios.aaf0c54186ba.csv",
+          "pistachios.ebdfbbe04a2b.csv"
+        ],
+        "val_files": [
+          "pistachios.011fa4305de0.csv"
+        ],
+        "fold_count": 5
+      },
+      "potato": {
+        "train_files": [
+          "potato.7f493d25b78f.csv",
+          "potato.a346ac8679de.csv",
+          "potato.ad22f5063114.csv",
+          "potato.f1832809e24b.csv"
+        ],
+        "val_files": [
+          "potato.31b6769479a1.csv"
+        ],
+        "fold_count": 5
+      },
+      "radish": {
+        "train_files": [
+          "radish.322323a5c0c0.csv",
+          "radish.80cc18179d1a.csv",
+          "radish.bf0456be0da8.csv",
+          "radish.db63f1ebe465.csv"
+        ],
+        "val_files": [
+          "radish.1f6a68193789.csv"
+        ],
+        "fold_count": 5
+      },
+      "saffron": {
+        "train_files": [
+          "saffron.6c62034310a3.csv",
+          "saffron.a9ec93aa4e4d.csv",
+          "saffron.cd1b4d31adb8.csv",
+          "saffron.e3e8e4ff75be.csv"
+        ],
+        "val_files": [
+          "saffron.6a7c16093494.csv"
+        ],
+        "fold_count": 5
+      },
+      "star_anise": {
+        "train_files": [
+          "star_anise.7ea8c43f6fa6.csv",
+          "star_anise.942828ed2999.csv",
+          "star_anise.adeba74849df.csv",
+          "star_anise.bb263b1aa2c8.csv"
+        ],
+        "val_files": [
+          "star_anise.05cc11d40a14.csv"
+        ],
+        "fold_count": 5
+      },
+      "strawberry": {
+        "train_files": [
+          "strawberry.258fe656aa0b.csv",
+          "strawberry.310a68a24f60.csv",
+          "strawberry.35cfcb0c123b.csv",
+          "strawberry.951468f2ab04.csv"
+        ],
+        "val_files": [
+          "strawberry.1ee1ef35422d.csv"
+        ],
+        "fold_count": 5
+      },
+      "sweet_potato": {
+        "train_files": [
+          "sweet_potato.61fa7e3329eb.csv",
+          "sweet_potato.cc45345217a6.csv",
+          "sweet_potato.cc6d44ec6e22.csv",
+          "sweet_potato.cdf65deec4e6.csv"
+        ],
+        "val_files": [
+          "sweet_potato.188d82f8d72b.csv"
+        ],
+        "fold_count": 5
+      },
+      "tomato": {
+        "train_files": [
+          "tomato.7dccef20a4e9.csv",
+          "tomato.a6ca1eaad811.csv",
+          "tomato.ab5a46e28f61.csv",
+          "tomato.e0b9abb7850f.csv"
+        ],
+        "val_files": [
+          "tomato.69691bcad171.csv"
+        ],
+        "fold_count": 5
+      },
+      "turnip": {
+        "train_files": [
+          "turnip.512a76ff607c.csv",
+          "turnip.b531fd7f1ae6.csv",
+          "turnip.c6a109041ea4.csv",
+          "turnip.fda2e6bcc400.csv"
+        ],
+        "val_files": [
+          "turnip.4b00cc32eca9.csv"
+        ],
+        "fold_count": 5
+      },
+      "walnuts": {
+        "train_files": [
+          "walnuts.4403eaec0723.csv",
+          "walnuts.a9aea2972073.csv",
+          "walnuts.c1f6fa0841bf.csv",
+          "walnuts.f710e88caa12.csv"
+        ],
+        "val_files": [
+          "walnuts.04d2e7e42cfd.csv"
+        ],
+        "fold_count": 5
+      }
+    },
+    "train_file_count": 200,
+    "val_file_count": 50,
+    "train_windows": 2009,
+    "val_windows": 503,
+    "test_windows": 502
+  },
+  "model": {
+    "track": "exact-upstream-search-phase2",
+    "contrastive": false,
+    "architecture": "transformer",
+    "input_dim": 6,
+    "model_dim": 512,
+    "num_heads": 8,
+    "num_layers": 6,
+    "dropout": 0.05,
+    "num_classes": 50,
+    "optimizer": {
+      "lr": 0.0003,
+      "weight_decay": 0.0,
+      "warmup_ratio": 0.0,
+      "label_smoothing": 0.0
+    }
+  }
+}

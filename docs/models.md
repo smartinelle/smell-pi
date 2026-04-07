@@ -1,5 +1,7 @@
 # Models
 
+See also: `docs/exported_artifacts.md` for the currently exported edge-ready checkpoint bundle and its exact preprocessing contract.
+
 All models are PyTorch. The primary model to replicate is ScentFormer. LSTM, CNN, and MLP are baselines.
 
 Input shape for all sequential models: `(batch, T, 12)` — `T` time steps, 12 sensor channels.
