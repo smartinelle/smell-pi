@@ -2,6 +2,8 @@
 
 **Replicating [SmellNet](https://github.com/MIT-MI/SmellNet) on a Raspberry Pi.**
 
+![smell-pi hardware rig — Raspberry Pi, breadboard, and the full sensor array](docs/img/rig_overview.jpg)
+
 SmellNet (Feng et al., 2025) is the first large-scale open-source dataset for real-world smell recognition using portable gas and chemical sensors. The original study collected data with an Adafruit ESP32 Feather running Arduino firmware. `smell-pi` adapts the full pipeline — sensor collection, preprocessing, model training, and edge inference — to run natively in Python on a Raspberry Pi.
 
 - **Paper**: [SMELLNET: A Large-scale Dataset for Real-world Smell Recognition](https://arxiv.org/abs/2506.00239) (Feng et al., 2025)
@@ -23,6 +25,8 @@ See [`docs/overview.md`](docs/overview.md) for the full phase plan and how `smel
 ---
 
 ## Hardware
+
+![Close-up of the sensor array — Seeed Multichannel Gas V2, three MQ sensors on breakout boards, and walnuts in frame for a live recording](docs/img/sensor_array.jpg)
 
 The Raspberry Pi has no built-in ADC, so analog MQ sensors are read through an **ADS1115** 16-bit ADC over I2C. All other sensors connect directly.
 
