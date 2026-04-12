@@ -34,7 +34,7 @@ The Raspberry Pi has no built-in ADC, so analog MQ sensors are read through an *
 |---|---|---|
 | Seeed Grove Multichannel Gas Sensor V2 | NO2, C2H5OH, VOC, CO | I2C (0x08) |
 | Adafruit BME680 | Temperature, Pressure, Humidity, Gas Resistance | I2C (0x76) |
-| MQ-3 / MQ-9 / MQ-135 | Benzene, LPG, Alcohol/CO2 | Analog → ADS1115 (0x48) |
+| MQ-3 / MQ-5 / MQ-9 | Alcohol, LPG / natural gas, CO / flammable gases | Analog → ADS1115 (0x48) |
 
 Full wiring diagrams, I2C address map, calibration notes, and BOM live in [`docs/hardware.md`](docs/hardware.md) and [`docs/wiring.md`](docs/wiring.md).
 
