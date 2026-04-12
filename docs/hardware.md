@@ -2,44 +2,30 @@
 
 ## Original SmellNet Hardware
 
-The paper used an **Adafruit ESP32 Feather** running Arduino firmware. The sensor suite is:
-
-| Sensor | Measured channels | Interface |
-|---|---|---|
-| Seeed Grove Multichannel Gas Sensor V2 | NO2, C2H5OH, VOC, CO | I2C |
-| MQ-135 | Alcohol / CO2 | Analog |
-| MQ-9 | LPG | Analog |
-| MQ-3 | Benzene / Alcohol | Analog |
-| Adafruit BME680 | Temperature, Pressure, Humidity, Gas Resistance | I2C |
-
-**Sampling rate**: 2 Hz  
-**Collection trigger**: button press on the Feather
-
-The 12 CSV columns produced are:
-```
-timestamp, NO2, C2H5OH, VOC, CO, Alcohol, LPG, Benzene,
-Temperature, Pressure, Humidity, Gas_Resistance, Altitude
-```
-(HCHO sensor was present in hardware but disabled due to unreliable readings.)
+The paper used an **Adafruit ESP32 Feather** running Arduino firmware, sampling at **2 Hz** via a button-press trigger on the Feather. Its sensor suite includes a Seeed Grove Multichannel Gas Sensor V2 for NO2/C2H5OH/VOC/CO, several MQ-series analog gas sensors, and an Adafruit BME680 for temperature/pressure/humidity/gas resistance. See [MIT-MI/SmellNet](https://github.com/MIT-MI/SmellNet) for the exact original BOM.
 
 ---
 
-## RPi Adaptation
+## smell-pi Hardware
 
-The Raspberry Pi has no built-in ADC, so MQ analog sensors need an external ADC. All I2C sensors connect directly.
+smell-pi uses a Raspberry Pi instead of the ESP32. Since the RPi has no built-in ADC, analog MQ sensors are read through **two ADS1115** 16-bit ADC boards over I2C. All other sensors connect directly.
 
 ### Bill of Materials
 
 | Component | Purpose | Notes |
 |---|---|---|
-| Raspberry Pi 4 (or 3B+) | Host / compute | 2GB+ recommended |
+| Raspberry Pi 4 (or 3B+) | Host / compute | 2 GB+ recommended |
 | Seeed Grove Multichannel Gas Sensor V2 | NO2, C2H5OH, VOC, CO | I2C, 3.3V–5V |
-| Adafruit BME680 breakout | Temp, Pressure, Humidity, Gas R | I2C (0x76 or 0x77) |
-| MQ-3 module | Benzene / Alcohol | Analog — via ADS1115 |
-| MQ-9 module | LPG | Analog — via ADS1115 |
-| MQ-135 module | Alcohol / CO2 | Analog — via ADS1115 |
-| ADS1115 breakout (Adafruit or similar) | 16-bit 4-ch ADC | I2C (0x48) |
-| 5V power supply / breadboard | Power + wiring | MQ sensors need 5V heater |
+| Adafruit BME680 breakout | Temp, Pressure, Humidity, Gas R, Altitude | I2C (0x76 or 0x77) |
+| MQ-3 module | Alcohol / benzene | Analog — ADS1115 #1 A0 |
+| MQ-5 module | LPG / natural gas / methane | Analog — ADS1115 #1 A1 |
+| MQ-9 module | CO / flammable gases | Analog — ADS1115 #1 A2 |
+| HCHO sensor (analog) | Formaldehyde | Analog — ADS1115 #1 A3 |
+| Air Quality sensor (analog) | General VOC / air quality | Analog — ADS1115 #2 A0 |
+| ADS1115 breakout ×2 | 16-bit 4-channel ADC | I2C (0x48, 0x49) |
+| 5V power supply / breadboard | Power + wiring | MQ sensors need a 5V heater supply |
+
+> The two ADS1115 boards are distinguished by their ADDR pin: `ADDR → GND` gives 0x48, `ADDR → VDD` gives 0x49. See `collection/collect.py` for the canonical pinout in code.
 
 ### I2C Address Map
 
@@ -47,35 +33,34 @@ The Raspberry Pi has no built-in ADC, so MQ analog sensors need an external ADC.
 |---|---|
 | Seeed Multichannel Gas V2 | 0x08 |
 | Adafruit BME680 | 0x76 (SDO low) |
-| ADS1115 | 0x48 (ADDR → GND) |
+| ADS1115 #1 | 0x48 (ADDR → GND) |
+| ADS1115 #2 | 0x49 (ADDR → VDD) |
 
-> All three can coexist on the same I2C bus (RPi pins 3/SDA, 5/SCL).
+> All four devices share the same I2C bus on RPi pins 3/SDA and 5/SCL.
 
-### MQ Sensor Wiring (via ADS1115)
+### Analog Sensor Wiring
 
 ```
-MQ-3  AOUT → ADS1115 A0
-MQ-9  AOUT → ADS1115 A1
-MQ-135 AOUT → ADS1115 A2
-(A3 spare)
+ADS1115 #1 (0x48)
+  A0 ← MQ-3   AOUT
+  A1 ← MQ-5   AOUT
+  A2 ← MQ-9   AOUT
+  A3 ← HCHO   AOUT
+
+ADS1115 #2 (0x49)
+  A0 ← Air Quality sensor AOUT
+  A1 / A2 / A3 spare
 
 MQ VCC → 5V rail
 MQ GND → GND
-ADS1115 VDD → 3.3V
-ADS1115 SDA/SCL → RPi GPIO 2/3
+ADS1115 VDD  → 3.3V
+ADS1115 SDA  → RPi GPIO 2 (pin 3)
+ADS1115 SCL  → RPi GPIO 3 (pin 5)
 ```
 
 ### Calibration
 
-MQ sensors require warm-up (~30 min first use, ~5 min thereafter) and calibration of R0 in clean air. The original firmware used:
-
-| Sensor | RatioInCleanAir | Calibrated R0 |
-|---|---|---|
-| MQ-135 | 3.6 | 14.29 |
-| MQ-9 | 9.6 | 2.96 |
-| MQ-3 | 60 | 0.04 |
-
-These values will need to be re-calibrated for our specific units and environment.
+MQ sensors require warm-up (~30 min first use, ~5 min thereafter) and calibration of R0 in clean air. Each sensor module must be calibrated for the specific unit and environment — don't blindly copy R0 values from datasheets or other implementations. The collection script (`collection/collect.py`) writes raw voltages from the ADS1115 for `MQ3`, `MQ5`, `MQ9`, `HCHO`, and `AirQuality`; conversion to PPM happens downstream.
 
 ### BME680 Configuration
 

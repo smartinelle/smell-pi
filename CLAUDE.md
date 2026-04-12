@@ -38,7 +38,7 @@ smell-pi/
 
 ## Key Technical Facts
 
-- **Sensors**: Seeed Grove Multichannel Gas V2 (I2C), MQ-3, MQ-9, MQ-135 (analog via ADS1115 ADC), Adafruit BME680 (I2C). See `docs/hardware.md`.
+- **Sensors**: Seeed Grove Multichannel Gas V2 (I2C), MQ-3 / MQ-5 / MQ-9 + HCHO + Air Quality (analog via two ADS1115 ADCs at 0x48 and 0x49), Adafruit BME680 (I2C). See `docs/hardware.md`.
 - **Data format**: CSV, 12 channels, 2 Hz. See `docs/data_pipeline.md`.
 - **Preprocessing**: baseline subtraction (subtract first row) + first-order temporal diff (`df.diff(periods=25)`) + sliding window (default 100 samples, stride 50).
 - **Primary model**: ScentFormer — a 4-layer, 8-head Transformer encoder with sinusoidal positional encoding and mean pooling. See `docs/models.md`.

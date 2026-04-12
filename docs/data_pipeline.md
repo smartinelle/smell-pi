@@ -11,7 +11,7 @@ Temperature, Pressure, Humidity, Gas_Resistance, Altitude
 
 - **timestamp**: milliseconds since recording start
 - **NO2, C2H5OH, VOC, CO**: raw ADC counts from Seeed Multichannel Gas V2
-- **Alcohol, LPG, Benzene**: PPM concentration from MQ-135, MQ-9, MQ-3 respectively
+- **Alcohol, LPG, Benzene**: derived from the MQ-series analog sensors (MQ-3, MQ-5, MQ-9 read via ADS1115 in `collection/collect.py`; PPM conversion happens downstream from raw voltages)
 - **Temperature** (°C), **Pressure** (hPa), **Humidity** (%RH), **Gas_Resistance** (kΩ), **Altitude** (m): from BME680
 
 File naming convention (matches SmellNet):
