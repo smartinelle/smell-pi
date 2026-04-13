@@ -86,3 +86,18 @@ The exported model is a transformer classifier with:
 This is the best straightforward edge inference target right now because it is a standard classifier checkpoint.
 
 The current contrastive checkpoints are smaller, but they require a GC-MS embedding bank and retrieval logic, so they are not the simplest first deployment path on the Pi.
+
+---
+
+## Compatibility with smell-pi raw collections
+
+`collection/collect.py` writes **14 raw sensor channels**, not the SmellNet 12-channel paper format and not the 6-channel subset this checkpoint expects. See [`data_pipeline.md`](data_pipeline.md#channel-layers) for the full three-layer map.
+
+To feed a locally collected CSV into this checkpoint, the following bridge is needed (and is not yet implemented in this repo):
+
+1. **Voltage → PPM conversion**: turn the raw `MQ3` / `MQ5` / `MQ9` voltages from `collect.py` into the `Alcohol` and `LPG` PPM channels the model expects. This requires per-sensor R0 calibration — see [`hardware.md`](hardware.md). The mapping from "which MQ produces which named channel" has to match the upstream SmellNet convention, not just any plausible assignment.
+2. **Drop unused channels**: `Benzene`, BME680 (`Temperature`, `Pressure`, `Humidity`, `Gas_Resistance`, `Altitude`), plus the `HCHO` and `AirQuality` columns smell-pi records but the paper doesn't.
+3. **Reorder** the remaining columns to `[NO2, C2H5OH, VOC, CO, Alcohol, LPG]`.
+4. **Apply** the FOTD / windowing / scaling pipeline above, using the `scaler_mean` and `scaler_scale` from `preprocessing.json`.
+
+Until that bridge exists, the exported checkpoint can only be run on CSVs already in the SmellNet 12-channel format (i.e. from the upstream Hugging Face dataset), not on freshly collected smell-pi recordings.

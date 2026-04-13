@@ -14,11 +14,13 @@ This project is an independent replication effort and is not affiliated with the
 
 ---
 
-## Goals
+## Scope
 
-1. **Data collection on RPi** — wire the same sensor suite to a Raspberry Pi and produce recordings in the same 12-channel CSV format as SmellNet, without needing an ESP32 or Arduino.
-2. **Model training & evaluation** — reimplement ScentFormer (the Transformer baseline from the paper) along with LSTM / CNN / MLP baselines, and benchmark against the paper's 58.5% Top-1 accuracy on the 50-class task.
-3. **Edge inference** — run the trained model on-device in real time, streaming live sensor data to predictions.
+This repo is specifically the **Pi-side collection + inference package**:
+
+- **Shipped today**: Python data-collection scripts that drive the sensor suite at 2 Hz and write CSV recordings, plus one pre-trained checkpoint bundle exported from the upstream training harness.
+- **Training happens elsewhere**: the supervised + autoresearch training harness lives in the sibling repo [`smellnet-autoresearch`](https://github.com/smartinelle/smellnet-autoresearch), which trains on the upstream SmellNet dataset.
+- **Planned**: an on-device real-time inference loop that runs the exported checkpoint against live sensor data.
 
 See [`docs/overview.md`](docs/overview.md) for the full phase plan and how `smell-pi` differs from the original SmellNet setup.
 
@@ -44,29 +46,31 @@ Full wiring diagrams, I2C address map, calibration notes, and BOM live in [`docs
 
 ```
 smell-pi/
-├── collection/              # RPi data collection scripts (collect.py, test_sensors.py)
-├── data/                    # raw CSV recordings (one folder per substance)
-│   ├── training/
-│   └── testing/
-├── src/                     # model code (ScentFormer, LSTM, CNN, MLP, dataset, training)
-├── preprocessing/           # FOTD + windowing pipeline
-├── training/                # training loops and experiment configs
-├── testing/                 # evaluation scripts
-├── real_time_testing_nut/   # real-time inference experiments (nuts)
-├── real_time_testing_spice/ # real-time inference experiments (spices)
-├── artifacts/               # exported edge-ready checkpoint bundles
-├── docs/                    # project documentation (see below)
-└── autoresearch_smellnet/   # standalone autoresearch / benchmark tooling
+├── CLAUDE.md                # agent-facing project context
+├── README.md
+├── collection/              # RPi data collection scripts
+│   ├── collect.py           #   2 Hz sensor recorder → data/{split}/{substance}/*.csv
+│   └── test_sensors.py      #   bus sanity check
+├── artifacts/               # exported edge-ready checkpoint bundles (trained upstream)
+│   └── smellnet_base_phase2_exact_upstream/
+│       ├── checkpoint.pt    #   ScentFormer 6-channel classifier, 57.97% Top-1
+│       ├── labels.json
+│       ├── preprocessing.json
+│       ├── training_metrics.json
+│       └── final_test_metrics.json
+└── docs/                    # project documentation (see below)
 ```
+
+`data/` is gitignored — raw recordings live only on the Pi that produced them. Training / experiment code is **not** in this repo; it lives in [`smellnet-autoresearch`](https://github.com/smartinelle/smellnet-autoresearch).
 
 Documentation in [`docs/`](docs/):
 
 - [`overview.md`](docs/overview.md) — project goals, phase plan, differences from original
 - [`hardware.md`](docs/hardware.md) — sensor suite, BOM, calibration
 - [`wiring.md`](docs/wiring.md) — pin-level wiring diagrams
-- [`data_pipeline.md`](docs/data_pipeline.md) — CSV format, FOTD preprocessing, sliding windows
+- [`data_pipeline.md`](docs/data_pipeline.md) — CSV formats (raw collection, paper, exported), FOTD preprocessing, sliding windows
 - [`models.md`](docs/models.md) — ScentFormer and baseline architectures
-- [`exported_artifacts.md`](docs/exported_artifacts.md) — edge-ready checkpoint bundles and preprocessing contract
+- [`exported_artifacts.md`](docs/exported_artifacts.md) — edge-ready checkpoint bundle and input contract
 - [`commands.md`](docs/commands.md) — common commands cheat sheet
 
 ---
@@ -103,20 +107,15 @@ python collection/collect.py cinnamon --duration 120
 python collection/collect.py cinnamon --split testing --duration 60
 ```
 
-Recordings land in `data/{split}/{substance}/{substance}_NNN.csv` with the same 12-channel format as SmellNet.
+Recordings land in `data/{split}/{substance}/{substance}_NNN.csv` with 14 raw sensor channels at 2 Hz. The full channel layout is documented in [`docs/data_pipeline.md`](docs/data_pipeline.md).
 
 ### 3. Train a model
 
-```bash
-# Example (see training/ for full configs)
-bash run_experiments.sh
-```
+Training is **not** performed in this repo. The pre-trained checkpoint in [`artifacts/smellnet_base_phase2_exact_upstream/`](artifacts/smellnet_base_phase2_exact_upstream/) was produced by the training harness in the sibling repo [`smellnet-autoresearch`](https://github.com/smartinelle/smellnet-autoresearch), trained on the upstream SmellNet dataset. See [`docs/exported_artifacts.md`](docs/exported_artifacts.md) for the input contract and test metrics.
 
-Model checkpoints are written to `saved_models/`. Edge-ready bundles (TorchScript / ONNX + preprocessing contract) are exported into `artifacts/`.
+### 4. Real-time inference (planned)
 
-### 4. Real-time inference
-
-See `real_time_testing_nut/` and `real_time_testing_spice/` for live-streaming inference experiments against the collected checkpoints.
+An on-device inference loop is planned but not yet committed. It will need to (a) apply the 6-channel input contract from `preprocessing.json`, (b) bridge smell-pi's raw MQ voltages to the `Alcohol` / `LPG` PPM channels the model expects, and (c) run the sliding-window classifier on-device.
 
 ---
 
@@ -132,9 +131,9 @@ Details in [`docs/data_pipeline.md`](docs/data_pipeline.md).
 
 ## Primary Model — ScentFormer
 
-A 4-layer, 8-head Transformer encoder with sinusoidal positional encoding, mean pooling, and a small MLP classifier head. Input shape `(batch, T, 12)`, target: 50 substance classes.
+A 4-layer, 8-head Transformer encoder with sinusoidal positional encoding, mean pooling, and a small MLP classifier head. In the SmellNet paper, input shape is `(batch, T, 12)` over 50 substance classes and the model reaches **58.5% Top-1 accuracy** on the offline test set.
 
-The paper reports **58.5% Top-1 accuracy** on the 50-class single-substance task. Baselines (LSTM / CNN / MLP) are also implemented for comparison. Architecture details in [`docs/models.md`](docs/models.md).
+The exported checkpoint shipped in this repo is a variant trained on a **6-channel subset** (`NO2, C2H5OH, VOC, CO, Alcohol, LPG`) with `input_dim = 6, model_dim = 512, num_heads = 8, num_layers = 6`, reaching **57.97% Top-1** on held-out test data. See [`docs/exported_artifacts.md`](docs/exported_artifacts.md) for the full input contract. Baselines (LSTM / CNN / MLP) and the autoresearch training loops live in [`smellnet-autoresearch`](https://github.com/smartinelle/smellnet-autoresearch), not in this repo.
 
 ---
 

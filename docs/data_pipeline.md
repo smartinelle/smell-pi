@@ -1,8 +1,49 @@
 # Data Pipeline
 
-## Raw Data Format
+## Channel Layers
 
-Each recording is a CSV file with 12 sensor channels sampled at **2 Hz**:
+smell-pi touches **three distinct sensor-channel layouts** that must be reconciled. The docs, model contracts, and collection script each refer to one of these, so a reader needs the map up front.
+
+| Layer | Sensor channels | Where it lives |
+|---|---|---|
+| **Raw collection (smell-pi)** | 14 | `collection/collect.py` output |
+| **SmellNet paper format** | 12 | Upstream [Hugging Face dataset](https://huggingface.co/datasets/DeweiFeng/smell-net); expected by [`smellnet-autoresearch`](https://github.com/smartinelle/smellnet-autoresearch) training code |
+| **Exported model input** | 6 | `artifacts/smellnet_base_phase2_exact_upstream/` (see [`exported_artifacts.md`](exported_artifacts.md)) |
+
+### Raw collection (14 channels)
+
+`collect.py` writes these columns (plus `timestamp_ms`):
+
+```
+NO2, C2H5OH, VOC, CO,
+Temperature, Pressure, Humidity, Gas_Resistance, Altitude,
+MQ3, MQ5, MQ9, HCHO, AirQuality
+```
+
+- **NO2, C2H5OH, VOC, CO** — raw integer readings from the Seeed Multichannel Gas V2 over I2C.
+- **Temperature, Pressure, Humidity, Gas_Resistance, Altitude** — BME680 over I2C.
+- **MQ3, MQ5, MQ9, HCHO, AirQuality** — **raw ADS1115 voltages**, not PPM. Conversion to calibrated concentrations is a downstream step and requires per-sensor R0 calibration (see [`hardware.md`](hardware.md)).
+
+### SmellNet paper format (12 channels)
+
+The original dataset and all training code use:
+
+```
+NO2, C2H5OH, VOC, CO, Alcohol, LPG, Benzene,
+Temperature, Pressure, Humidity, Gas_Resistance, Altitude
+```
+
+Here `Alcohol`, `LPG`, and `Benzene` are **PPM concentrations** derived from the MQ sensors on the original ESP32 rig. smell-pi does **not** currently produce these columns — there is no raw-voltage → PPM conversion committed in this repo, so locally collected CSVs can't be dropped directly into the paper-compatible training pipeline without that bridge.
+
+### Exported model input (6 channels)
+
+The checkpoint in `artifacts/smellnet_base_phase2_exact_upstream/` uses only `NO2, C2H5OH, VOC, CO, Alcohol, LPG`, dropping `Benzene` and all BME680 channels. See [`exported_artifacts.md`](exported_artifacts.md) for the full contract.
+
+---
+
+## SmellNet 12-channel Raw Data Format
+
+The rest of this document describes the SmellNet 12-channel format — the preprocessing steps below all operate on that layer, not on smell-pi's 14-channel raw CSVs.
 
 ```
 timestamp, NO2, C2H5OH, VOC, CO, Alcohol, LPG, Benzene,
@@ -11,7 +52,7 @@ Temperature, Pressure, Humidity, Gas_Resistance, Altitude
 
 - **timestamp**: milliseconds since recording start
 - **NO2, C2H5OH, VOC, CO**: raw ADC counts from Seeed Multichannel Gas V2
-- **Alcohol, LPG, Benzene**: derived from the MQ-series analog sensors (MQ-3, MQ-5, MQ-9 read via ADS1115 in `collection/collect.py`; PPM conversion happens downstream from raw voltages)
+- **Alcohol, LPG, Benzene**: PPM concentrations derived from the MQ sensors (conversion is applied upstream of this pipeline)
 - **Temperature** (°C), **Pressure** (hPa), **Humidity** (%RH), **Gas_Resistance** (kΩ), **Altitude** (m): from BME680
 
 File naming convention (matches SmellNet):
